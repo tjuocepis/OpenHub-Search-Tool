@@ -4,6 +4,8 @@ version := "1.0"
 
 scalaVersion := "2.11.0"
 
+mainClass in (Compile, run) := Some("MainServer.Server")
+
 libraryDependencies ++= Seq(
   // jackson
   //"com.fasterxml.jackson.core" % "jackson-core" % "2.8.0",
