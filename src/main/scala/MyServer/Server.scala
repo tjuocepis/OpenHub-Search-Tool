@@ -31,11 +31,13 @@ object Server extends App {
 
   val settings = Settings.builder().put("cluster.name", "elasticsearch-titus").build()
   val client: TransportClient = TransportClient.builder().settings(settings).build()
-    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("104.197.149.99"), 9300))
+    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("104.197.88.210"), 9300))
 
   /*
    *  GET endpoint
-   *  ex) http://localhost:8080/elastic?where=tags&keyword="html&results=100"
+   *  ex) http://localhost:8080/elastic?where=tags&keyword=html&results=100
+   *      OR
+   *      http://104.198.215.5:9999/elastic?where=code&keyword=engine
    *  $where accepts 'id', 'project_name', 'description', 'url', 'tags', 'code' as its values e.g. where=code
    *  if where is not specified it will default to searching through everything
    *  $keyword accepts any word e.g. keyword=Java
@@ -48,8 +50,9 @@ object Server extends App {
       parameter("keyword" ? "c++", "where" ? "_all", "results" ? 10000) { (keyword, where, results) =>
 
         val actor = system.actorOf(Props[ElasticRequestHandler])
+
         // Receives a MyServer.NeatResponse and sends the text back to the client
-        onSuccess(sendQuery(RemoteElasticQuery(keyword, where, results, client), actor).mapTo[NeatResponse]) { resp: NeatResponse =>
+        onSuccess(ask(actor, RemoteElasticQuery(keyword, where, results, client)).mapTo[NeatResponse]) { resp: NeatResponse =>
           actor ! PoisonPill
           complete(resp.text) // return response to client
         }
@@ -73,9 +76,9 @@ object Server extends App {
   }
 
   // START SERVER
-  val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 9999)
+  val bindingFuture = Http().bindAndHandle(route, "104.154.133.99", 9999)
 
-  println("ENTER to terminate")
-  StdIn.readLine()
-  system.terminate()
+  //println("ENTER to terminate")
+  //StdIn.readLine()
+  //system.terminate()
 }

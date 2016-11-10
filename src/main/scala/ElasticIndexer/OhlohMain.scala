@@ -2,6 +2,7 @@ package ElasticIndexer
 
 import java.io.File
 
+import MyServer.ProjectData
 import akka.actor.{ActorSystem, Props}
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
@@ -34,16 +35,8 @@ object OhlohMain extends App {
     future onSuccess {
       case result : (Elem,Elem) =>
 
-        // Extract necessary project meta data from the result
-        val id = (result._1 \\ "project_id").text
-        val name = (result._1 \\ "name").text
-        val desc = (result._1 \\ "description").text
-        val tags: Seq[String] = (result._1 \\ "tags" \ "tag").map(_.text)
-        val url = (result._1 \\ "homepage_url").text
-        val languages = (result._1 \\ "language").map(_.text.trim)
-
         // Create a metadata object
-        val projectMetaData = ProjectMeta(id, name, desc, tags.mkString(" "), url)
+        val projectMetaData = parseXmlToGetProjectData(result._1)
 
         // Extract the repository URLs from the result
         val repo_urls: Seq[String] = (result._2 \\ "url").map(_.text.trim)
@@ -51,15 +44,16 @@ object OhlohMain extends App {
         // Flag used to check if it is a git repository or not (We are only working with git repositories)
         var isGitRepo = false
 
+        // *** I BELIEVE THAT THIS DOES NOT DO ANYTHING SINCE IT KEEPS RESETING THE FLAG OVER AND OVER ***
         // For each URL check to see it is a git repository and set the isGitRepo flag
         repo_urls foreach { url =>
           if (url.contains(".git")) {
-            println("Project ID = " + id + " DOES have a GIT repository. Including Project Repo!!!")
+            println("Project ID = " + projectMetaData.id + " DOES have a GIT repository. Including Project Repo!!!")
             isGitRepo = true
           }
           else {
             isGitRepo = false
-            println("Project ID = " + id + " does NOT have a GIT repository. Skipping Project Repo!!!")
+            println("Project ID = " + projectMetaData.id + " does NOT have a GIT repository. Skipping Project Repo!!!")
           }
         }
 
@@ -68,7 +62,7 @@ object OhlohMain extends App {
 
           // Create an actor and send it a message to clone the git repository
           val gitRepoCloneHelper = system.actorOf(Props[GitRepoCloneHandler])
-          val answer = ask(gitRepoCloneHelper, GetProjectContents(repo_urls, id, projectMetaData)).mapTo[File]
+          val answer = ask(gitRepoCloneHelper, GetProjectContents(repo_urls, projectMetaData.id, projectMetaData)).mapTo[File]
 
           // When the response is received the repository was cloned...
           answer onSuccess {
@@ -84,5 +78,16 @@ object OhlohMain extends App {
       case _ =>
         println("------ Default Case ------")
     }
+  }
+
+  def parseXmlToGetProjectData(xml: Elem) : ProjectMeta = {
+    // Extract necessary project meta data from the result
+    val id = (xml \\ "project_id").text
+    val name = (xml \\ "name").text
+    val desc = (xml \\ "description").text
+    val tags: Seq[String] = (xml \\ "tags" \ "tag").map(_.text)
+    val url = (xml \\ "homepage_url").text
+    val languages = (xml \\ "language").map(_.text.trim)
+    ProjectMeta(id, name, desc, tags.mkString(" "), url)
   }
 }
