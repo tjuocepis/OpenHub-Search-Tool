@@ -76,7 +76,7 @@ object Server extends App {
   }
 
   // START SERVER
-  val bindingFuture = Http().bindAndHandle(route, "104.154.133.99", 9999)
+  val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 9999)
 
   //println("ENTER to terminate")
   //StdIn.readLine()
