@@ -4,7 +4,7 @@ version := "1.0"
 
 scalaVersion := "2.11.0"
 
-mainClass in (Compile, run) := Some("MainServer.Server")
+mainClass in (Compile, run) := Some("MyServer.Server")
 
 libraryDependencies ++= Seq(
   // jackson
