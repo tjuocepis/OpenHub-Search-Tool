@@ -96,4 +96,12 @@ case class ProduceProject(dir: File, metaData: ProjectMeta)
 
 // Project data models
 case class FileData(filename: String, path: String, content: String, project_id: String, project_name: String, project_url: String)
-case class ProjectMeta(id: String, project_name: String, description: String, tags: String, url: String)
+case class ProjectMeta(id: String, project_name: String, description: String, tags: String, url: String) {
+  def contains(proj: ProjectMeta) : Boolean = {
+    if (id.contentEquals(proj.id) && project_name.contentEquals(proj.project_name) && description.contentEquals(proj.description) &&
+        tags.contentEquals(proj.tags) && url.contentEquals(proj.url)) {
+      return true
+    }
+    false
+  }
+}

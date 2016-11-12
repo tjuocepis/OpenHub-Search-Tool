@@ -25,7 +25,7 @@ class ElasticIndexRequestHandler extends Actor with ActorLogging {
     case IndexProject(metaData, fileData) =>
       val settings = Settings.builder().put("cluster.name", "elasticsearch-titus").build()
       val client = TransportClient.builder().settings(settings).build()
-        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("104.197.149.99"), 9300))
+        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("104.197.88.210"), 9300))
 
       val metaJson = write(metaData)
 

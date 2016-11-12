@@ -27,7 +27,7 @@ object OhlohMain extends App {
   //val projects = new util.ArrayList[String]
 
   // Loops through a range of projects where $i is the project id
-  for (i <- 10501 to 10700) {
+  for (i <- 12017 to 12200) {
     val ohlohActor = system.actorOf(Props[OhlohActor]) // Creates the actor to process Ohloh requests
     val future = ask(ohlohActor, Download(i)).mapTo[(Elem,Elem)] // Sends the download request to OhlohActor
 
