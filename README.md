@@ -28,11 +28,16 @@ however this has already been done and ElasticSearch already is indexed with all
 information.
 
 
-MyServer package contains logic that interfaces with ElasticSearch and responds to user requests.  The user can send
-requests to the web service using the endpoint “http://104.154.133.99:9999/elastic?keyword=java&where=code&results=100”
+MyServer package contains logic that interfaces with ElasticSearch and responds to user requests.
+
+The user can send requests to the web service using the endpoint:
+
+http://104.154.133.99:9999/elastic?keyword=java&where=code&results=100
 
 “where” accepts values of id, project_name, description, url, tags and code.
+
 “keyword” accepts any word.
+
 “results” accepts any number value.
 
 If “where” has value of “code” then it will look through all of the indexed files and will return a list of all files
