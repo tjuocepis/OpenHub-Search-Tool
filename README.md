@@ -44,6 +44,8 @@ To query the web service you can do curl -XGET to the endpoint of the service or
 
 curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=engine&where=code’
 
+curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=variables&where=code’
+
 curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=php&where=tags’
 
 curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=library&where=code&results=100’
