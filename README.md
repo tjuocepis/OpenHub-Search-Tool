@@ -40,15 +40,21 @@ If “where” has value of “code” then it will look through all of the inde
 To build and run the project do ‘sbt build’ and ‘sbt run’ inside the project directory.  It will automatically only run the MyServer.Server and not ElasticIndexer.OhlohMain.
 
 
-To query the web service you can do curl -XGET to the endpoint of the service or just click on the urls
+To query the web service you can do curl -XGET to the endpoint of the service or just click on the urls:
 
-ex) curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=engine&where=code’
-    curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=php&where=tags’
-    curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=library&where=code&results=100’
-    curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=java&where=description’
-    curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=c++&where=description’
-    curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=python&where=tags’
-    curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=library&where=project_name’
+curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=engine&where=code’
+
+curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=php&where=tags’
+
+curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=library&where=code&results=100’
+
+curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=java&where=description’
+
+curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=c++&where=description’
+
+curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=python&where=tags’
+
+curl -XGET ‘http://104.154.133.99:9999/elastic?keyword=library&where=project_name’
 
 
 **SoapUI Load Test Results:**
